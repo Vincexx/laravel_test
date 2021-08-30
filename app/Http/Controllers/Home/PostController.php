@@ -10,11 +10,13 @@ use App\Http\Requests\Post\StoreRequest;
 class PostController extends Controller
 {
     public function getAllPosts() {
-        return response()->json(Post::all(), 200);
+        $posts = Post::orderBy('id', 'desc')->get();
+        return response()->json($posts, 200);
     }
     
     public function getAuthPosts(Request $request) {
-        return response()->json($request->user()->posts, 200);
+        $posts = $request->user()->posts()->orderBy('id', 'desc')->get();
+        return response()->json($posts, 200);
     }
 
     public function edit(Post $post) {

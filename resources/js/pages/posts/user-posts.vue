@@ -12,7 +12,7 @@
             <button
               type="button"
               class="btn btn-warning"
-              @click="fetchUsersPost(post.id), (edit = true)"
+              @click="editTrue(), fetchUsersPost(post.id)"
             >
               Edit
             </button>
@@ -27,56 +27,53 @@
         </div>
         <p>
           {{ post.body }}
+          {{ edit }}
         </p>
       </div>
     </div>
 
-    <add :edit="edit" />
+    <add />
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import Add from "./modals/Add.vue";
+import { mapGetters, mapActions } from 'vuex'
+import Add from './modals/Add.vue'
 
 export default {
   components: {
     Add
   },
-  middleware: "auth",
-  data() {
-    return {
-      edit: false
-    };
-  },
+  middleware: 'auth',
   computed: {
-    ...mapGetters("post", ["usersPosts"])
+    ...mapGetters('post', ['usersPosts', 'edit'])
   },
-  created() {
-    this.fetchUsersPosts();
+  created () {
+    this.fetchUsersPosts()
   },
   methods: {
-    ...mapActions("post", [
-      "fetchUsersPosts",
-      "showModal",
-      "deleteUser",
-      "fetchUsersPost"
+    ...mapActions('post', [
+      'fetchUsersPosts',
+      'showModal',
+      'deleteUser',
+      'fetchUsersPost',
+      'editTrue'
     ])
   },
-  metaInfo() {
-    return { title: this.$t("User Posts") };
+  metaInfo () {
+    return { title: this.$t('User Posts') } 
   }
-};
+} 
 </script>
 
 <style scoped>
 .box {
   padding: 1em;
-  border: 1px solid #e5e5e5;
+  border: 1px solid #e5e5e5; 
 }
 
 .nav-bar {
   color: black;
-  text-decoration: none;
+  text-decoration: none; 
 }
 </style>

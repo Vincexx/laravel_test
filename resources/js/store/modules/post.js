@@ -1,91 +1,122 @@
-import axios from "axios";
+import axios from 'axios'
 
 export const state = {
   posts: [],
   usersPosts: [],
   post: {
-    title: "",
-    body: ""
-  }
-};
+    title: '',
+    body: ''
+  },
+  edit: false
+}
 export const getters = {
   posts: state => state.posts,
   usersPosts: state => state.usersPosts,
-  post: state => state.post
-};
+  post: state => state.post,
+  edit: state => state.edit
+}
 export const actions = {
   // fetch all Posts
-  async fetchPosts({ commit }) {
+  async fetchPosts ({ commit }) {
     await axios
-      .get("/api/posts")
+      .get('/api/posts')
       .then(response => {
-        commit("setPosts", response.data);
+        commit('setPosts', response.data)
       })
-      .catch(error => console.log(error));
+      .catch(error => console.log(error))
   },
 
   // Fetch Users Posts
-  async fetchUsersPosts({ commit }) {
+  async fetchUsersPosts ({ commit }) {
     await axios
-      .get("/api/user-posts")
+      .get('/api/user-posts')
       .then(response => {
-        commit("setUsersPosts", response.data);
+        commit('setUsersPosts', response.data)
       })
-      .catch(error => console.log(error));
+      .catch(error => console.log(error))
   },
 
   // Add User
-  async addUser({ commit, dispatch }, data) {
+  async addUser ({ commit, dispatch }, data) {
     await axios
-      .post("/api/posts", data)
+      .post('/api/posts', data)
       .then(response => {
-        dispatch("fetchUsersPosts");
-        dispatch("hideModal");
-        commit("clearPost");
+        dispatch('fetchUsersPosts')
+        dispatch('hideModal')
+        commit('clearPost')
       })
-      .catch(error => console.log(error));
+      .catch(error => console.log(error))
   },
 
   // Fetch Post
-  async fetchUsersPost({ commit, dispatch }, id) {
+  async fetchUsersPost ({ commit, dispatch }, id) {
     await axios
-      .get("/api/posts/" + id)
+      .get('/api/posts/' + id)
       .then(response => {
-        dispatch("showModal");
-        commit("setPost", response.data);
+        dispatch('showModal')
+        commit('setPost', response.data)
       })
-      .catch(error => console.log(error));
+      .catch(error => console.log(error))
+  },
+
+  // Update
+  async updateUser ({ commit, dispatch }, data) {
+    await axios
+      .patch('/api/posts/' + data.id, data)
+      .then(response => {
+        dispatch('fetchUsersPosts')
+        dispatch('hideModal')
+        commit('clearPost')
+      })
+      .catch(error => console.log(error))
   },
 
   // Delete
-  async deleteUser({ commit, dispatch }, id) {
-    await axios.delete("/api/posts/" + id).then(response => {
-      dispatch("fetchUsersPosts");
-    });
+  async deleteUser ({ commit, dispatch }, id) {
+    await axios.delete('/api/posts/' + id).then(response => {
+      dispatch('fetchUsersPosts')
+    })
+  },
+
+  // Edit
+  editFalse ({ commit }) {
+    commit('setEditFalse', false)
+  },
+
+  editTrue ({ commit }) {
+    commit('setEditTrue', true)
   },
 
   // Modals
-  showModal({}) {
-    $("#addPost").modal("show");
+  showModal () {
+    $('#addPost').modal('show')
   },
-  hideModal({}) {
-    $("#addPost").modal("hide");
+  hideModal({ dispatch }) {
+    dispatch('editFalse')
+    $('#addPost').modal('hide')
   }
-};
+}
 export const mutations = {
-  setPosts(state, payload) {
-    return (state.posts = payload);
+  setPosts (state, payload) {
+    return (state.posts = payload)
   },
-  setUsersPosts(state, payload) {
-    return (state.usersPosts = payload);
+  setUsersPosts (state, payload) {
+    return (state.usersPosts = payload)
   },
-  setPost(state, payload) {
-    return (state.post = payload);
+  setPost (state, payload) {
+    return (state.post = payload)
   },
-  clearPost() {
+  clearPost () {
     return (state.post = {
-      title: "",
-      body: ""
-    });
+      title: '',
+      body: ''
+    })
+  },
+  setEditTrue (state, payload) {
+    return state.edit = true
+  },
+  setEditFalse (state, payload) {
+    return state.edit = false
   }
-};
+  
+}

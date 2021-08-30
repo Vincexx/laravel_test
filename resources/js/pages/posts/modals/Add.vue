@@ -13,7 +13,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Add Post</h5>
-            <button type="button" class="close" @click="hideModal">
+            <button type="button" @click="hideModal">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -40,12 +40,23 @@
           </div>
           <div class="modal-footer">
             <button
+            v-show="!edit"
               type="button"
               class="btn btn-primary"
               @click="addUser(post)"
             >
               Save
             </button>
+
+            <button
+            v-show="edit"
+              type="button"
+              class="btn btn-primary"
+              @click="updateUser(post)"
+            >
+              Update
+            </button>
+            
           </div>
         </div>
       </div>
@@ -54,14 +65,14 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions } from 'vuex';
 export default {
   computed: {
-    ...mapGetters("post", ["post"])
+    ...mapGetters('post', ['post', 'edit'])
   },
 
   methods: {
-    ...mapActions("post", ["hideModal", "addUser"])
+    ...mapActions('post', ['hideModal', 'addUser', 'editFalse', 'updateUser'])
   }
-};
+}
 </script>
