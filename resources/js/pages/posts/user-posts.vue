@@ -27,7 +27,6 @@
         </div>
         <p>
           {{ post.body }}
-          {{ edit }}
         </p>
       </div>
     </div>
